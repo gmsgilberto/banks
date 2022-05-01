@@ -12,6 +12,7 @@ services:
       - "8080:8080"
     volumes:
       - ./:/banks
+      - ~/.m2:/root/.m2
     networks:
       - banks-network
     command: mvn clean spring-boot:run      
