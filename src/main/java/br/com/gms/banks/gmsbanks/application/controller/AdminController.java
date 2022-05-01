@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gms.banks.gmsbanks.account.balance.repository.AccountBalanceRepository;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 /**
  * @author gilberto
  */
-@Api(tags = "Admin Services")
+@Tag(name = "Admin Services")
 @RestController
 @AllArgsConstructor
 public class AdminController {

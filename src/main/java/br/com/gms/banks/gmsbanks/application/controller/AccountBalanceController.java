@@ -15,13 +15,13 @@ import br.com.gms.banks.gmsbanks.account.balance.event.builder.EventBuilder;
 import br.com.gms.banks.gmsbanks.account.balance.service.AccountBalanceService;
 import br.com.gms.banks.gmsbanks.account.balance.vo.AccountEventRequest;
 import br.com.gms.banks.gmsbanks.account.balance.vo.EventResponse;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 /**
  * @author gilberto
  */
-@Api(tags = "Account Balance Services")
+@Tag(name = "Account Balance Services")
 @RestController
 @AllArgsConstructor
 public class AccountBalanceController {
