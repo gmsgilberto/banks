@@ -4,5 +4,5 @@ COPY gms-banks.jar /usr/share/banks.app.jar
 WORKDIR /usr/share/
 ARG BANKS_PROFILE=local
 ENV BANKS_PROFILE=${BANKS_PROFILE}
-CMD java -jar /usr/share/banks.app.jar -Dspring.profiles.active=$BANKS_PROFILE
+CMD java -jar /usr/share/banks.app.jar -Dspring.profiles.active=$BANKS_PROFILE -Xms128M
 EXPOSE 8080
