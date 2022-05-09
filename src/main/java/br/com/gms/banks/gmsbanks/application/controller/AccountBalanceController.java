@@ -2,6 +2,7 @@ package br.com.gms.banks.gmsbanks.application.controller;
 
 import java.math.BigDecimal;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class AccountBalanceController {
 	public ResponseEntity<BigDecimal> getAccountBalance(@RequestParam(name = "account_id", required = true) Integer accountid){
 		var balance = this.service.findByAccountId(accountid);
 		if(balance == null) {
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<>(BigDecimal.ZERO, HttpStatus.NOT_FOUND);
 		}
 		return ResponseEntity.ok(balance.getAmount());
 	}
@@ -47,7 +48,7 @@ public class AccountBalanceController {
 		}else {
 			var balance = this.service.bookEvent(event.getAccountid(), event);
 			if(balance == null) {
-				return ResponseEntity.notFound().build();
+				return EventResponse.notFound();
 			}
 			return ResponseEntity.status(201).body(event.result(balance));
 		}
@@ -61,10 +62,12 @@ public class AccountBalanceController {
 	private ResponseEntity<EventResponse> handleTransfer(Transfer transfer) {
 		var transferResult = this.service.bookTransfer(transfer);
 		if(transferResult == null) {
-			return ResponseEntity.notFound().build();
+			return EventResponse.notFound();
 		}
 		return ResponseEntity.status(201).body(transferResult);
 	}
+
+
 	
 
 }
