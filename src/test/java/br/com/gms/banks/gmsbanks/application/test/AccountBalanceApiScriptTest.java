@@ -38,18 +38,39 @@ class AccountBalanceApiScriptTest {
 		withdrawFromExistingAccount();
 		transferFromExistingAccount();
 		transferFromNonExistingAccount();
+		withdrawFromExistingAccountNegative();
+		withdrawFromExistingAccountOverBalance();
 		
-		var response = this.restTemplate.getForEntity(buildUrl("balance?account_id=100"), String.class);
-		baseAsserts(response, 200, "0");
-		response = this.restTemplate.getForEntity(buildUrl("balance?account_id=300"), String.class);
-		baseAsserts(response, 200, "15");
-		
-		resetDatabase();
-		response = this.restTemplate.getForEntity(buildUrl("balance?account_id=100"), String.class);
-		baseAsserts(response, 404);
 
 	}
 
+	/*
+	 *  Withdraw from existing account Negative
+	 *  POST /event {"type":"withdraw", "origin":"100", "amount":100}
+	 *  201 {"origin": {"id":"100", "balance":-100}}
+	 * */
+	private void withdrawFromExistingAccountNegative() {
+		log.info("#  Withdraw from existing account Negative");
+		var request = new AccountEventRequest();
+		request.withdraw("100", new BigDecimal("100"));
+		var response = this.restTemplate.postForEntity( buildUrl("event"),  request, String.class);
+		baseAsserts(response,201,"{\"origin\": {\"id\":\"100\", \"balance\":-100}}");
+	}
+	
+	
+	/**
+	 * # Withdraw from existing account Over balance
+	 * POST /event {"type":"withdraw", "origin":"100", "amount":51}
+	 * 404 0
+	 */
+	private void withdrawFromExistingAccountOverBalance() {
+		log.info("#  Withdraw from existing account Over balance");
+		var request = new AccountEventRequest();
+		request.withdraw("100", new BigDecimal("51"));
+		var response = this.restTemplate.postForEntity( buildUrl("event"),  request, String.class);
+		baseAsserts(response,404);
+	}
+		
 
 	/**
 	 * # Transfer from existing account

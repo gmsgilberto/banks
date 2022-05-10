@@ -6,6 +6,7 @@ package br.com.gms.banks.gmsbanks.account.balance;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import br.com.gms.banks.gmsbanks.exeptions.LimiteException;
 import lombok.Getter;
 
 /**
@@ -31,7 +32,16 @@ public class AccountBalance implements Serializable{
 	}
 
 	public synchronized AccountBalance bookEvent(AccountEvent<?> event) {
+		
+		var valorOriginal = this.amount;
 		this.amount = this.amount.add(event.calcBookValue(this.id));
+
+		if(this.amount.doubleValue() < -150) {
+			var exception = new LimiteException("Nao e possivel realizar o saque, valor disponivel: " + this.amount);
+			this.amount = valorOriginal;
+			throw exception;
+		}
+		
 		return this;
 	}
 	
